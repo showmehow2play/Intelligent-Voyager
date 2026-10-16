@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Importa dati anonimizzati</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #15243a; background: #f5f8fc; }
+    body { min-height: 100vh; display: grid; place-items: center; margin: 0; padding: 24px; }
+    main { width: min(700px, 100%); padding: 30px; border: 1px solid #dce5ef; border-radius: 22px; background: white; box-shadow: 0 18px 50px rgba(19,34,56,.10); }
+    h1 { margin: 0 0 10px; letter-spacing: -.04em; }
+    p, li { color: #65768c; line-height: 1.55; }
+    .notice { padding: 14px; border-radius: 12px; background: #fff3cd; color: #765614; font-size: 13px; line-height: 1.5; }
+    .drop { display: grid; gap: 10px; margin: 22px 0; padding: 26px; border: 2px dashed #bcc9da; border-radius: 15px; text-align: center; }
+    input[type=file] { width: 100%; }
+    button, a { display: inline-block; padding: 12px 16px; border: 0; border-radius: 10px; background: #5267f3; color: white; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    .secondary { background: #eef0ff; color: #4052d2; }
+    .summary { display: none; margin-top: 18px; padding: 16px; border: 1px solid #9fe1d1; border-radius: 12px; background: #e1f7f1; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    code { background: #f0f3f8; padding: 2px 5px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Importa dati dal vecchio export</h1>
+    <p>Questa pagina legge un file JSON esportato dall'applicazione di riferimento e crea un file compatibile con il nuovo prototipo.</p>
+    <div class="notice"><strong>Privacy:</strong> l'anonimizzazione avviene nel browser. I nomi vengono sostituiti con Traveller 1, Traveller 2, ecc. Il file non viene inviato online e l'app originale non viene modificata.</div>
+    <ul>
+      <li>esporta dall'app originale il formato JSON;</li>
+      <li>seleziona qui il file esportato;</li>
+      <li>scarica il file anonimizzato;</li>
+      <li>apri il nuovo prototipo e usa <strong>Importa JSON</strong>.</li>
+    </ul>
+    <div class="drop">
+      <label for="sourceFile"><strong>Seleziona il file JSON dell'app originale</strong></label>
+      <input id="sourceFile" type="file" accept="application/json,.json">
+      <span id="status">Nessun file selezionato.</span>
+    </div>
+    <div id="summary" class="summary"></div>
+    <div class="actions">
+      <button id="download" disabled>Scarica JSON anonimizzato</button>
+      <a class="secondary" href="AVVIA_APP.html">Torna all'avvio app</a>
+    </div>
+  </main>
+  <script>
+    const sourceFile = document.getElementById('sourceFile');
+    const status = document.getElementById('status');
+    const summary = document.getElementById('summary');
+    const download = document.getElementById('download');
+    let output = null;
+
+    const categoryMap = {
+      transport: 'flight', viaggio: 'flight', voli: 'flight', flight: 'flight',
+      accommodation: 'accommodation', hotel: 'accommodation', casa: 'accommodation', alloggio: 'accommodation',
+      car: 'car', auto: 'car', benzina: 'car',
+      food: 'food', cibo: 'food', ristorante: 'food', spesa: 'food',
+      activities: 'activities', attivita: 'activities', attività: 'activities',
+      insurance: 'insurance', assicurazione: 'insurance',
+      transfers: 'transfers', trasferimenti: 'transfers',
+      other: 'other', altro: 'other', extra: 'other', generali: 'other'
+    };
+
+    function uid(prefix) { return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`; }
+    function arr(value) { return Array.isArray(value) ? value : []; }
+    function number(value) { const result = Number(value); return Number.isFinite(result) ? result : 0; }
+    function personName(value) {
+      if (typeof value === 'string') return value.trim();
+      if (!value || typeof value !== 'object') return '';
+      return String(value.name || value.fullName || value.displayName || value.nome || value.cognome || value.id || '').trim();
+    }
+    function keyForPerson(value) { return personName(value).toLowerCase(); }
+    function category(value) { return categoryMap[String(value || 'other').toLowerCase()] || 'other'; }
+
+    function createImporter(source) {
+      const scenarios = arr(source.scenarios);
+      const actuals = arr(source.actuals);
+      const people = [];
+      const addPerson = (value) => {
+        const name = personName(value);
+        if (name && !people.some((item) => item.toLowerCase() === name.toLowerCase())) people.push(name);
+      };
+      const collectParticipants = (value) => arr(value).forEach(addPerson);
+      scenarios.forEach((item) => collectParticipants(item.participants));
+      actuals.forEach((item) => {
+        collectParticipants(item.participants);
+        arr(item.expenses).forEach((expense) => {
+          addPerson(expense.paidBy);
+          arr(expense.sharedBy).forEach(addPerson);
+        });
+      });
+      if (!people.length) people.push('Traveller');
+      const peopleIds = new Map(people.map((name, index) => [name.toLowerCase(), `p-import-${index + 1}`]));
+      const peopleById = (value) => {
+        const name = personName(value);
+        return peopleIds.get(name.toLowerCase()) || peopleIds.get(people[0].toLowerCase());
+      };
+      const participants = people.map((originalName, index) => ({ id: `p-import-${index + 1}`, name: `Traveller ${index + 1}`, email: '' }));
+      const linesFromScenario = (scenario) => {
+        const expenses = scenario.expenses && typeof scenario.expenses === 'object' && !Array.isArray(scenario.expenses) ? Object.entries(scenario.expenses) : arr(scenario.expenses).map((expense) => [expense.category || 'other', expense.amount]);
+        return expenses.map(([key, value]) => ({ id: uid('line'), category: category(key), label: String(key), amount: number(typeof value === 'object' ? value.amount : value), currency: typeof value === 'object' && value.currency ? value.currency : 'EUR', allocation: 'total', source: 'import-anonymized', notes: 'Importato dall\'export originale', linkedForecastId: null }));
+      };
+      const importedScenarios = scenarios.map((scenario, index) => ({
+        id: uid('scenario'),
+        name: scenario.name || `Scenario importato ${index + 1}`,
+        notes: scenario.notes || 'Importato dall\'export originale.',
+        budgetLines: linesFromScenario(scenario),
+        flightSearch: null,
+        flightOffers: [],
+        flightForecast: null,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }));
+      if (!importedScenarios.length) importedScenarios.push({ id: uid('scenario'), name: 'Scenario importato', notes: 'Creato dai dati importati.', budgetLines: [], flightSearch: null, flightOffers: [], flightForecast: null, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+      const importedExpenses = [];
+      actuals.forEach((actual) => {
+        arr(actual.expenses).forEach((expense) => {
+          const sharedBy = arr(expense.sharedBy).map(peopleById).filter(Boolean);
+          importedExpenses.push({
+            id: uid('expense'),
+            description: expense.description || 'Spesa importata',
+            category: category(expense.category),
+            amount: number(expense.amount),
+            currency: expense.currency || 'EUR',
+            amountEUR: number(expense.amountEUR ?? expense.amount),
+            date: expense.date || '',
+            paidBy: peopleById(expense.paidBy),
+            sharedBy: sharedBy.length ? sharedBy : participants.map((person) => person.id),
+            notes: expense.notes || 'Importata dall\'export originale',
+            splitEqually: true,
+            future: expense.isPaid === false
+          });
+        });
+      });
+      const first = scenarios[0] || actuals[0] || {};
+      const tripParticipants = participants;
+      const trip = {
+        id: uid('trip'),
+        name: first.name || 'Viaggio importato',
+        destination: first.destination || 'Destinazione importata',
+        destinationCode: '',
+        startDate: first.startDate || '',
+        endDate: first.endDate || '',
+        baseCurrency: 'EUR',
+        participants: tripParticipants,
+        members: tripParticipants.map((person, index) => ({ name: person.name, email: '', role: index === 0 ? 'owner' : 'viewer', status: 'active' })),
+        scenarios: importedScenarios,
+        activeScenarioId: importedScenarios[0].id,
+        actuals: { expenses: importedExpenses, payments: [] }
+      };
+      return { format: 'travel-business-case-anonymized-v1', createdAt: new Date().toISOString(), source: 'export originale anonimizzato localmente', trip, metadata: { scenarios: importedScenarios.length, expenses: importedExpenses.length, travellers: participants.length } };
+    }
+
+    sourceFile.addEventListener('change', async () => {
+      const file = sourceFile.files && sourceFile.files[0];
+      if (!file) return;
+      try {
+        const source = JSON.parse(await file.text());
+        output = createImporter(source);
+        summary.style.display = 'block';
+        summary.innerHTML = `<strong>Anteprima pronta.</strong><br>${output.metadata.scenarios} scenari, ${output.metadata.expenses} spese e ${output.metadata.travellers} Traveller anonimizzati.`;
+        status.textContent = 'File letto localmente. Nessun dato è stato inviato online.';
+        download.disabled = false;
+      } catch (error) {
+        output = null;
+        download.disabled = true;
+        status.textContent = `Errore: ${error.message}`;
+      }
+    });
+
+    download.addEventListener('click', () => {
+      if (!output) return;
+      const blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'viaggio-importato-anonimizzato.json';
+      link.click();
+      URL.revokeObjectURL(link.href);
+    });
+  </script>
+</body>
+</html>
