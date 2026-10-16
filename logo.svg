@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 160" role="img" aria-labelledby="title desc">
+  <title id="title">Intelligent Voyager</title>
+  <desc id="desc">Logo con mappa piegata, montagne e rotta di viaggio</desc>
+  <defs>
+    <linearGradient id="map" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#f5e7c6"/>
+      <stop offset="1" stop-color="#d9bf8e"/>
+    </linearGradient>
+    <filter id="mapShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#4b3524" flood-opacity=".25"/>
+    </filter>
+  </defs>
+  <path d="M17 31 54 18l42 13 37-13v101l-37 13-42-13-37 13z" fill="url(#map)" stroke="#765136" stroke-width="3" stroke-linejoin="round" filter="url(#mapShadow)"/>
+  <path d="M54 18v101M96 31v101" fill="none" stroke="#a98250" stroke-width="2"/>
+  <path d="m18 84 20-16 15 5 15-25 14 20 14-8 20 12 17-18" fill="none" stroke="#607154" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M26 101c19-17 32 2 48-11 13-11 19-33 45-36" fill="none" stroke="#a34f38" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 9"/>
+  <circle cx="26" cy="101" r="5" fill="#a34f38" stroke="#f5e7c6" stroke-width="2"/>
+  <path d="m119 47 15 6-11 3-4 11-5-12z" fill="#a34f38" stroke="#f5e7c6" stroke-width="2"/>
+  <circle cx="115" cy="33" r="11" fill="#607154" stroke="#f5e7c6" stroke-width="3"/>
+  <path d="m115 25 3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#f5e7c6"/>
+  <text x="184" y="84" fill="#4b3524" font-family="Georgia,serif" font-size="40" font-weight="700" letter-spacing="-1.5">Intelligent</text>
+  <text x="184" y="123" fill="#a34f38" font-family="Georgia,serif" font-size="40" font-weight="700" letter-spacing="-1.5">Voyager</text>
+  <path d="M187 136h245" stroke="#607154" stroke-width="3"/>
+</svg>

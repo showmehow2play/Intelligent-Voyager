@@ -34,7 +34,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .app-shell { min-height: 100vh; display: grid; grid-template-columns: 242px minmax(0, 1fr); }
 .sidebar { background: var(--navy); color: #e8eef8; padding: 24px 16px; display: flex; flex-direction: column; gap: 22px; }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -.03em; font-size: 18px; padding: 0 8px; }
-.brand-mark { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg,#7183ff,#22c9ae); font-size: 18px; }
+.brand-mark { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px; object-fit: cover; font-size: 18px; }
 .side-label { color: #94a7bd; font-size: 10px; text-transform: uppercase; letter-spacing: .09em; font-weight: 800; }
 .trip-picker { margin-top: 8px; width: 100%; border: 1px solid rgba(255,255,255,.14); border-radius: 12px; background: #253650; color: #fff; padding: 12px; font-size: 12px; }
 .side-nav { display: grid; gap: 5px; }

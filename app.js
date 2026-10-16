@@ -374,7 +374,7 @@ function renderShell() {
   document.getElementById('app').innerHTML = `
     <div class="app-shell">
       <aside class="sidebar">
-        <div class="brand"><span class="brand-mark">✈</span><span>Intelligent Voyager</span></div>
+        <div class="brand"><img class="brand-mark" src="icon.svg" alt=""><span>Intelligent Voyager</span></div>
         <div><div class="side-label">I miei viaggi</div><select id="tripPicker" class="trip-picker">${state.trips.map((item) => `<option value="${esc(item.id)}" ${item.id === trip.id ? 'selected' : ''}>${esc(item.name)} · ${item.participants.length} pers.</option>`).join('')}</select><div class="inline-actions" style="margin-top:8px;display:grid;gap:6px"><button class="btn btn-sm" style="width:100%;background:#253650;border-color:rgba(255,255,255,.14);color:#fff" data-action="new-trip">＋ Nuovo viaggio</button><button class="btn btn-sm btn-danger" style="width:100%" data-action="delete-trip">Elimina viaggio</button></div></div>
         <div><div class="side-label">Accesso al viaggio</div><div class="sidebar-members">${trip.members.slice(0, 4).map((member, index) => `<span class="mini-avatar" title="${esc(member.name)}" style="${index % 2 ? 'background:#d9f5ee;color:#087d68' : ''}">${initials(member.name)}</span>`).join('')}<span class="member-count">${trip.members.length} membri</span></div></div>
         <nav class="side-nav" aria-label="Navigazione viaggio">${nav.map(([view, icon, label]) => `<button class="nav-item ${state.activeView === view ? 'active' : ''}" data-action="navigate" data-view="${view}">${icon} &nbsp; ${label}</button>`).join('')}</nav>

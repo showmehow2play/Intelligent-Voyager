@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 160" role="img" aria-labelledby="title desc">
+  <title id="title">Intelligent Voyager — proposta passaporto</title>
+  <desc id="desc">Logo ispirato a un passaporto antico con timbro di viaggio</desc>
+  <defs>
+    <linearGradient id="leather" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#4c3326"/>
+      <stop offset="1" stop-color="#2f211b"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#f3dfb2"/>
+      <stop offset="1" stop-color="#cda86d"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="144" height="144" rx="28" fill="url(#leather)" stroke="#b88b53" stroke-width="3"/>
+  <rect x="23" y="23" width="114" height="114" rx="19" fill="url(#paper)" stroke="#e9ca91" stroke-width="2"/>
+  <circle cx="80" cy="76" r="39" fill="none" stroke="#7d5738" stroke-width="3" stroke-dasharray="3 5"/>
+  <path d="M46 96c18-28 34-4 47-28 8-14 15-20 27-20" fill="none" stroke="#9b4933" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="47" cy="96" r="5" fill="#9b4933"/>
+  <path d="m115 45 15 7-11 3-5 11-5-12z" fill="#426052" stroke="#f3dfb2" stroke-width="2"/>
+  <path d="M80 43v65M48 76h64" stroke="#7d5738" stroke-opacity=".42" stroke-width="1.5"/>
+  <path d="m80 48 7 24-7 9-7-9z" fill="#426052"/>
+  <path d="m80 104-7-24 7-9 7 9z" fill="#9b4933"/>
+  <text x="183" y="82" fill="#4c3326" font-family="Georgia,serif" font-size="40" font-weight="700" letter-spacing="-1.5">Intelligent</text>
+  <text x="183" y="121" fill="#426052" font-family="Georgia,serif" font-size="40" font-weight="700" letter-spacing="-1.5">Voyager</text>
+  <text x="187" y="143" fill="#9b4933" font-family="Georgia,serif" font-size="11" letter-spacing="3">PLAN · DISCOVER · SHARE</text>
+</svg>

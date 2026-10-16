@@ -1,5 +1,5 @@
-const CACHE_NAME = 'travel-next-mvp-v2';
-const ASSETS = ['./', './index.html', './styles.css', './app.js', './manifest.json', './icon.svg', './supabase-client.js', './supabase/config.js'];
+const CACHE_NAME = 'travel-next-mvp-v4';
+const ASSETS = ['./', './index.html', './styles.css', './app.js', './manifest.json', './icon.svg', './logo.svg', './supabase-client.js', './supabase/config.js'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));

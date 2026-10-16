@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 160" role="img" aria-labelledby="title desc">
+  <title id="title">Intelligent Voyager — proposta cartografia</title>
+  <desc id="desc">Logo su pergamena con rosa dei venti e rotta di viaggio</desc>
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#f4e4bc"/>
+      <stop offset="1" stop-color="#d7b982"/>
+    </linearGradient>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#4b3524" flood-opacity=".22"/>
+    </filter>
+  </defs>
+  <rect x="5" y="5" width="150" height="150" rx="34" fill="url(#paper)" stroke="#7c593c" stroke-width="3" filter="url(#softShadow)"/>
+  <path d="M20 50c25-18 42 14 66-5 22-17 43-2 57-12M14 111c26-13 43 11 66-4 26-17 42 0 64-14" fill="none" stroke="#9a744b" stroke-opacity=".38" stroke-width="2"/>
+  <circle cx="80" cy="80" r="45" fill="none" stroke="#775436" stroke-opacity=".56" stroke-width="2"/>
+  <path d="M80 29v102M29 80h102M44 44l72 72M116 44l-72 72" stroke="#775436" stroke-opacity=".28" stroke-width="1.5"/>
+  <path d="m80 37 10 35-10 16-10-16z" fill="#7e2f2b"/>
+  <path d="m80 123-10-35 10-16 10 16z" fill="#f4e4bc" stroke="#7e2f2b" stroke-width="1.5"/>
+  <path d="m37 80 35-10 16 10-16 10z" fill="#f4e4bc" stroke="#7e2f2b" stroke-width="1.5"/>
+  <path d="m123 80-35 10-16-10 16-10z" fill="#7e2f2b"/>
+  <path d="M39 106c21-20 27-4 42-20 12-13 20-30 38-30" fill="none" stroke="#b45f3c" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 8"/>
+  <circle cx="39" cy="106" r="5" fill="#b45f3c" stroke="#f4e4bc" stroke-width="2"/>
+  <path d="m116 48 15 5-11 4-4 10-5-12z" fill="#7e2f2b" stroke="#f4e4bc" stroke-width="2"/>
+  <text x="184" y="84" fill="#493426" font-family="Georgia,serif" font-size="40" font-weight="700" letter-spacing="-1.5">Intelligent</text>
+  <text x="184" y="123" fill="#9a4935" font-family="Georgia,serif" font-size="40" font-weight="700" letter-spacing="-1.5">Voyager</text>
+  <path d="M187 136h245" stroke="#b18652" stroke-width="2"/>
+</svg>
